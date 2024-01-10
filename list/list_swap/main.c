@@ -65,12 +65,9 @@ node_t *swap_list(node_t *head) {
 	}
 	dummy->next = head;
 	current = dummy;
-	while(current->next != NULL) {
+	while(current->next != NULL && current->next->next != NULL) {
 		p1 = current->next;
 		p2 = p1->next;
-		if(p2 == NULL) {
-			break;
-		}
 		p3 = p2->next; 
 
 		current->next = p2;
@@ -84,10 +81,39 @@ node_t *swap_list(node_t *head) {
 	return head;
 }
 
+node_t *swap_list_v2(node_t *head) {
+	node_t *dummy;
+	node_t *current;
+	node_t *temp;
+	node_t *temp1;
+	if(head == NULL) {
+		error_handler();
+	}
+	dummy = malloc(sizeof(node_t));
+	if(dummy == NULL) {
+		error_handler();
+	}
+	dummy->next = head;
+	current = dummy;
+	while(current->next != NULL && current->next->next != NULL) {
+		temp = current->next; // p1
+		temp1 = current->next->next->next; // p3
+		current->next = current->next->next;
+		current->next->next = temp;
+		current->next->next->next = temp1;
+		current = current->next->next;
+	}	
+	head = dummy->next;
+	free(dummy);
+	return head;
+}
+
 int main(void) {
 	node_t *head = construct_list(9);
 	print_list(head);
 	head = swap_list(head);
+	print_list(head);
+	head = swap_list_v2(head);
 	print_list(head);
 	return 0;
 }
