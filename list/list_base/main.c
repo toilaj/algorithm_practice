@@ -1,10 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct node {
+typedef struct node node_t;
+struct node {
 	int value;
-	struct node* next; //PS: cannot use node_t*
-} node_t;
+	node_t *next;
+};
 
 void error_handler() {
 	printf("cannot malloc \n");
@@ -126,6 +127,62 @@ node_t *insert_tail(node_t *head, int value) {
 	return head;
 }
 
+node_t *insert_head_target_n(node_t *head, unsigned int n, int value) {
+	node_t *current;
+	node_t *dummy;
+	node_t *new;
+	if(head == NULL) {
+		error_handler();
+	}
+	dummy =  malloc(sizeof(node_t));
+	if(dummy == NULL) {
+		error_handler();
+	}
+	dummy->next = head;
+	current = dummy; // the node n is always current->next. current->next = head, n = 0.
+	while(n != 0 && current != NULL) {
+		current = current->next;
+		n-- ;
+	}
+	new = malloc(sizeof(node_t));
+	if(new == NULL) {
+		error_handler();
+	}
+	new->value = value;
+	new->next =current->next;
+	current->next = new;
+	head = dummy->next;
+	free(dummy);
+	return head;
+}
+
+node_t *remove_target_n(node_t *head, unsigned int n) {
+	node_t *current;
+	node_t *dummy;
+	node_t *remove;
+	if(head == NULL) {
+		error_handler();
+	}
+	dummy = malloc(sizeof(node_t));
+	if(dummy == NULL){
+		error_handler();
+	}
+	dummy->next = head;
+	current = dummy;
+	while(n != 0 && current != NULL) {
+		current = current->next;
+		n--;
+	}
+	remove =  current->next;
+	current->next = current->next->next;
+	free(remove);
+	head = dummy->next;
+	free(dummy);
+	return head;
+}
+
+
+
 int main(void) {
 	node_t *head = construct_list(10);
 	print_list(head);
@@ -134,6 +191,10 @@ int main(void) {
 	head = insert_head_target(head, 5, 100);
 	print_list(head);
 	head = insert_tail(head, 200);
+	print_list(head);
+	head = insert_head_target_n(head, 3, 300);
+	print_list(head);
+	head = remove_target_n(head, 2);
 	print_list(head);
 	return 0;
 }	
