@@ -68,7 +68,7 @@ unsigned int remove_element_duplicated(int *list, unsigned int dup, unsigned int
 			 *也就意味着靠dup拉开的距离之间元素一定是相同的。
 			 * 另一方面理解：设dup = 2, 比较[slow - 2]而不是[slow - 1], 是因为 slow - 1位置的元素是上一次fast位置换过去的
 			 * 一旦本次fast位置的数跟上一次fast的数一样（连续两个一样数字），就会造成本次slow位置不填数，错过连续相同
-			 * 的数字。
+			 * 的数字。重点：是否要替换的标准应该是上一个不重复值！
 			 */
 			list[slow] = list[fast];
 			slow++;
