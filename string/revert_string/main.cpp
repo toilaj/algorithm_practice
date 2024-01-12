@@ -59,7 +59,7 @@ void revert_words(string &s) {
 }	
 
 int main(void) {
-	string s = " this is  a  example ";
+	string s = " this is  a  example  ";
 	revert_words(s);
 	cout << s << endl;
 	return 0;
