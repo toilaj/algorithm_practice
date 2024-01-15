@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <queue>
 
 using namespace std;
 
@@ -39,6 +40,18 @@ void print_vec(vector<int> &v) {
 	}
 	cout << endl;
 }
+
+void print_vec2(vector<vector<int> > &v) {
+	vector<vector<int> >::iterator it;
+	vector<int>::iterator it1;
+	for(it = v.begin(); v.end() != it; it++) {
+		for(it1 = (*it).begin(); it1 != (*it).end(); it1++) {
+			cout << *it1 << " ";
+		}
+		cout << endl;
+	}
+}
+
 node_t *init_br() {
 	node_t *node15 = new node_t(15, NULL, NULL);
 	node_t *node14 = new node_t(14, NULL, NULL);
@@ -92,22 +105,58 @@ void inorder_traversal(node_t *current, vector<int> &r) {
 	return;
 }
 
+void sequence_traversal(node_t *root, vector<vector<int> > &v) {
+	queue<node_t*> q;
+	int layer = 1;
+	if(root == NULL) {
+		return;
+	}	
+	q.push(root);
+	while(!q.empty()){
+		int size = q.size();
+		vector<int> vi;
+		while(size > 0) {
+			size--;
+			node_t *node = q.front();
+			q.pop();
+			vi.push_back(node->get_val());
+			if(node->get_left() != NULL) {
+				q.push(node->get_left());
+			}
+			if(node->get_right() != NULL) {
+				q.push(node->get_right());
+			}
+		}
+		v.push_back(vi);
+	}	
+	return;
+}
+
 
 int main(void) {
 	vector<int> result;	
 	node_t *root = init_br();
 
 	preorder_traversal(root, result);
+	cout << "preorder_traversal:" << endl;
 	print_vec(result);
 	result.clear();
 
 	inorder_traversal(root, result);
+	cout << "inorder_traversal:" << endl;
 	print_vec(result);
 	result.clear();
 
 	postorder_traversal(root, result);
+	cout << "postorder_traversal:" << endl;
 	print_vec(result);
 	result.clear();
+
+	vector<vector<int> > r;
+	cout << "sequence traversal:" << endl;
+	sequence_traversal(root,r);
+	print_vec2(r);	
+
 
 	return 0;
 }
